@@ -1,0 +1,48 @@
+
+<div class="limiter">
+  <div class="container-login100">
+    <div class="wrap-login100" >
+      <div class="login100-form">
+        <div class="outer">
+          <div class="middle">
+            <div class="loginBox md-whiteframe-z1">
+              <div style="text-align: center;">
+                <img style="max-width: 250px;position: relative;"  src="../../../../../../assets/img/logo.png" alt="">
+                <h2>Iniciar Sesion</h2>
+                <h5 class="md-toolbar-tools"><span>Módulo de cotización de proveedores</span></h5>
+              </div>
+
+              <form action="#"  (ngSubmit) = "submit()">
+                <mat-card  class="md-padding border-radio">
+                  <mat-form-field class="full-width">
+
+                    <input matInput placeholder="Usuario" name="usuario" required mayuscula
+                           [(ngModel)]="usuario.numdocumento" />
+                    <mat-icon matPrefix >person</mat-icon>
+                    <mat-error >Debe ingresar un usuario.</mat-error>
+                  </mat-form-field>
+                  <mat-form-field class="full-width">
+
+                    <input matInput placeholder="Contraseña" required
+                           type="password" name="password"
+                           [(ngModel)]="usuario.password"/>
+                    <mat-icon matPrefix >lock</mat-icon>
+                    <mat-error >Necesita especificar una contraseña.</mat-error>
+                  </mat-form-field>
+
+                    <div>
+                      <button mat-raised-button color="primary" type="submit" class="right">Iniciar sesión</button>
+                    </div>
+                  <br><br><br>
+                </mat-card>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="login100-more" style="background-image: url('../../../assets/img/backlogin.jpg');"></div>
+    </div>
+  </div>
+</div>
+

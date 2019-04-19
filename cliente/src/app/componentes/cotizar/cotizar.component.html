@@ -1,0 +1,90 @@
+<mat-toolbar color="primary" class="mat-elevation-z6">
+
+  <mat-toolbar-row>
+    <span>Solicitud de cotización</span>
+    <span class="example-spacer"></span>
+    <mat-icon class="example-icon" aria-hidden="false" aria-label="Example user verified icon">verified_user</mat-icon>
+  </mat-toolbar-row>
+
+</mat-toolbar>
+
+<div style="padding: 20px;">
+  <div style="font-family: Roboto, Arial, sans-serif;">
+    <div  style="display:block; margin-right: 10px; position:relative;" >
+      <div>
+        <div>
+          <div>
+            <img style="max-width: 250px;left: -25px;position: relative;"  src="../../../../../../assets/img/logo.png" alt="">
+          </div>
+        </div>
+        <div>
+          <table>
+            <tr>
+              <td style="width: 25%; font-size: small">Fecha de emisión</td>
+              <td>:</td>
+              <td style="font-size: small">{{cotizacion.fechacotizacion | date: 'dd/MM/yyyy h:mm:ss a'}}</td>
+            </tr>
+            <tr>
+              <td style="font-size: small">Fecha de entrega</td>
+              <td>:</td>
+              <td style="font-size: small">{{cotizacion.fechaentrega | date: 'dd/MM/yyyy h:mm:ss a'}}</td>
+            </tr>
+            <tr>
+              <td style="font-size: small">Fecha de vencimiento</td>
+              <td>:</td>
+              <td style="font-size: small">{{cotizacion.fechavencimiento | date: 'dd/MM/yyyy h:mm:ss a'}}</td>
+            </tr>
+            <tr>
+              <td style="font-size: small">Lugar de entrega</td>
+              <td>:</td>
+              <td style="font-size: small">{{cotizacion.lugarentrega}}</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div  style="text-align: center;right: 0;position: absolute; top: 0;" >
+        <div></div>
+        <div class="identificador" style="border: 1px solid #000000;height: 140px; width: 230px !important;
+                                        margin-top: 25px;border-radius: 15px; font-size: 14px">
+          <h1>Solicitud de cotizacion <br> N° {{ ("000000"+cotizacion.id).slice(-6)}}</h1>
+        </div>
+        <div ></div>
+      </div>
+    </div>
+    <div>
+      <div class="detalles" style="margin-top: 25px;">
+        <table style="width: 100%;">
+          <thead>
+          <tr>
+            <th>Descripción / Especificaciones</th>
+            <th>Cantidad</th>
+            <th>Unidad </th>
+            <th>Precio </th>
+            <th>Observaciones </th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let detalle of cotizacion.cotizaciondetalle">
+            <td>
+              <div style="font-size: 14px;font-weight: bold;">{{detalle.producto.nombre}}</div>
+              <div style="margin-left: 20px;font-size: 12px;" class="especificacion" *ngFor="let esp of detalle.especificaciones"> {{esp.detalle}}</div>
+            </td>
+            <td style="text-align: center;font-size: 12px;vertical-align: top;" class="texto-centrado">{{detalle.cantidad}}</td>
+            <td style="text-align: center;font-size: 12px;vertical-align: top;" class="texto-centrado">{{detalle.unidad.nombre}}</td>
+            <td style="text-align: center;font-size: 12px;vertical-align: top;" class="texto-centrado">
+              <mat-form-field fxFlex="100">
+                <input  type="number" autoFocus  matInput [(ngModel)]="detalle.precio" placeholder="Precio">
+              </mat-form-field>
+            </td>
+            <td style="text-align: center;font-size: 12px;vertical-align: top;" class="texto-centrado">
+              <mat-form-field fxFlex="100">
+                <input  mayuscula autoFocus  matInput [(ngModel)]="detalle.observacion" placeholder="Observacion">
+              </mat-form-field>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

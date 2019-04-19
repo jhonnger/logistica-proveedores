@@ -1,0 +1,25 @@
+.identificador{
+  border: 1px solid #000000;
+  max-height: 160px;
+  max-width: 275px;
+  margin-top: 25px;
+  border-radius: 15px;
+}
+.detalles{
+  margin-top: 15px;
+}
+.detalles table{
+  width: 100%;
+}
+.especificacion{
+  margin-left: 20px;
+  font-size: 12px;
+}
+
+.example-icon {
+  padding: 0 14px;
+}
+
+.example-spacer {
+  flex: 1 1 auto;
+}
