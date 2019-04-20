@@ -24,12 +24,14 @@ import {LoadingComponent} from './componentes/Loading/loading.component';
 import {MensajeConfirmComponent} from './componentes/mensaje-confirm/mensaje-confirm.component';
 import { CotizarComponent } from './componentes/cotizar/cotizar.component';
 import {HttpClientModule} from '@angular/common/http';
+import {AutofocusDirective} from './directives/autofocus.directive';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     UpperCaseText,
+    AutofocusDirective,
     Numerico,
     InicioComponent,
     MensajeAlertComponent,
