@@ -1,7 +1,7 @@
-import {CotizacionDetalle} from "./CotizacionDetalle";
-import {Proveedor} from "./Proveedor.interface";
+import {CotizacionDetalle} from './CotizacionDetalle';
+import {Proveedor} from './Proveedor.interface';
 
-export interface Cotizacion {
+export interface CotizacionProveedor {
   id?: number;
   fechacotizacion?: Date;
   fechaentrega?: Date;
@@ -15,6 +15,7 @@ export interface Cotizacion {
   proveedores?: Proveedor[];
   enviarEmail?: boolean;
   subject?: string;
+  cotizacion?: any;
   message?: string;
-  lugarentrega?:string;
+  lugarentrega?: string;
 }

@@ -9,27 +9,28 @@ import {logger} from "../global/environment";
 import {UtilServicio} from "../util/UtilServicio";
 import {MailSenderServicio} from "./MailSender.servicio";
 import {CotizacionProveedor, CotizacionProveedorDTO} from '../entidad/CotizacionProveedor';
-import {Proveedor} from "../entidad/Proveedor";
 import {RespuestaControlador} from '../util/RespuestaControlador';
+import {CotizacionProveedorDetalle} from '../entidad/CotizacionProveedorDetalle';
+import {CotizacionProveedorDetEsp} from '../entidad/CotizacionProveedorDetalleEspecificacion';
 
-export class CotizacionServicio {
+export class CotizacionProveedorServicio {
 
     senderServicio: MailSenderServicio;
     constructor(){
         this.senderServicio = new MailSenderServicio();
     }
 
-    static get CotizacionAttributes() {
+    static get CotizacionproveedorServicioAttributes() {
         return ['id', 'fechacotizacion','fechavencimiento']
     }
     private static _cotizacion: any;
     static get cotizacion() {
-        return CotizacionServicio._cotizacion;
+        return CotizacionProveedorServicio._cotizacion;
     }
 
     public async listarTodos(){
         return await  Cotizacion.findAll({
-            attributes: CotizacionServicio.CotizacionAttributes
+            attributes: CotizacionProveedorServicio.CotizacionproveedorServicioAttributes
         });
     }
 
@@ -60,7 +61,7 @@ export class CotizacionServicio {
         }
         respuesta = {ok: true, data:[]};
         respuesta.data = await  Cotizacion.findAndCountAll({
-            attributes: CotizacionServicio.CotizacionAttributes,
+            attributes: CotizacionProveedorServicio.CotizacionproveedorServicioAttributes,
             limit: cantidad,
             offset: pagina*cantidad,
             where,
@@ -97,7 +98,7 @@ export class CotizacionServicio {
         }
         respuesta = {ok: true, data:[]};
         respuesta.data = await  Cotizacion.findAndCountAll({
-            attributes: CotizacionServicio.CotizacionAttributes,
+            attributes: CotizacionProveedorServicio.CotizacionproveedorServicioAttributes,
             include: [{
                 model: CotizacionProveedor,
                 as: 'cotizacionproveedores',
@@ -116,26 +117,7 @@ export class CotizacionServicio {
     }
     public async guardar(cotizacion: any){
 
-        cotizacion = JSON.parse(cotizacion.data);
-
-        let opciones, cotizacionCreado;
-        opciones = {
-            include: [{
-                model: CotizacionProveedor,
-                as: 'cotizacionproveedores'
-            },{
-                model: CotizacionDetalle,
-                as: 'cotizaciondetalle',
-                include: [{
-                    model: CotizacionDetalleEspecificacion,
-                    as: 'especificaciones'
-                }]
-            }
-            ]};
-
-        cotizacionCreado =await  Cotizacion.create(cotizacion,opciones);
-
-        return {ok: true,data: cotizacionCreado.id, message: `Nueva cotizacion creado, Código: ${cotizacionCreado.id} `};
+        return {ok: false, message: `No permitido`};
     }
     private async tienePermisosDeProveedor(proveedorId: number, cotizacionId: number): Promise<boolean>{
         let cotizaciones;
@@ -151,90 +133,69 @@ export class CotizacionServicio {
         return  cotizaciones.count > 0;
 
     }
-    public async guardarCotizacionProveedor(cotizacion: CotizacionProveedorDTO, usuario){
-        let opciones, cotizacionCreado, tienePermisos;
 
-        tienePermisos = await this.tienePermisosDeProveedor(usuario.id, cotizacion.idcotizacion);
 
-        if(!tienePermisos) {
-            return RespuestaControlador.obtenerRespuestaError('Operación no permitida')
-        }
-        opciones = {
-            include: [{
-                model: CotizacionProveedor,
-                as: 'cotizacionproveedores'
-            },{
-                model: CotizacionDetalle,
-                as: 'cotizaciondetalle',
-                include: [{
-                    model: CotizacionDetalleEspecificacion,
-                    as: 'especificaciones'
-                }]
-            }
-            ]};
+    public async actualizar(cotizacionProveedor: any){
 
-        cotizacionCreado =await  CotizacionProveedor.create(cotizacion,opciones);
-
-        return {ok: true,data: cotizacionCreado.id, message: `Nueva cotizacion creado, Código: ${cotizacionCreado.id} `};
-    }
-
-    public async actualizar(cotizacion: any){
-
-        let cotizacionProveedores;
-        let cotizacionEnBase;
+        let cotizacionProveedorEnBase;
         let especificaciones;
         let respuesta;
         let detalles;
+        let detalleEnBase;
 
         try {
-            cotizacion = JSON.parse(cotizacion.data);
             //Buscamos el cotizacion para actualizarlo
-            cotizacionEnBase= await Cotizacion.findOne({  where: {
-                    id: cotizacion.id,
+            cotizacionProveedorEnBase= await CotizacionProveedor.findOne({  where: {
+                    id: cotizacionProveedor.id,
                     estado: true
                 } });
 
 
-            if(!UtilServicio.esNullUndefinedOVacio(cotizacionEnBase.id)){
-                await cotizacionEnBase.update(cotizacion);
-                detalles = cotizacion.cotizaciondetalle;
-                cotizacionProveedores = cotizacion.cotizacionproveedores;
+            if(!UtilServicio.esNullUndefinedOVacio(cotizacionProveedorEnBase.id)){
+                await CotizacionProveedor.update({observacion: cotizacionProveedor.observacion},
+                    {where: {id: cotizacionProveedorEnBase.id}});
+                detalles = cotizacionProveedor.cotizaciondetalle;
 
-                cotizacionProveedores.forEach(async item => {
-                    if(item.id){
-                        await CotizacionProveedor.update(item,{where: {id: item.id}});
-                    } else {
-                        item.idcotizacion = cotizacionEnBase.id;
-                        await CotizacionProveedor.create(item)
-                    }
-                });
 
                 detalles.forEach( async (detalle) => {
                     if(detalle.id){
-                        await CotizacionDetalle.update(detalle,{where: {id: detalle.id}});
-                        especificaciones = detalle.especificaciones;
+                        detalleEnBase = await CotizacionProveedorDetalle.findOne({where: {
+                            id: detalle.id,
+                            estado: true,
+                            idcotizacionproveedorcab: cotizacionProveedor.id
+                        }});
 
-                        if(!UtilServicio.esNullUndefinedOVacio(especificaciones) && especificaciones.length> 0){
-                            especificaciones.forEach(async (especificacion) => {
-                                if(especificacion.id)
-                                    await CotizacionDetalleEspecificacion.update(especificacion,{where: {id: especificacion.id}})
-                                else {
-                                    especificacion.idcotizaciondetalle = detalle.id;
-                                    await CotizacionDetalleEspecificacion.create(especificacion)
-                                }
-                            })
+                        if(!UtilServicio.esNullUndefinedOVacio(detalleEnBase)){
+                            await CotizacionProveedorDetalle.update({
+                                precio: detalle.precio,
+                                observacion: detalle.observacion
+                            } ,{where: {id: detalle.id}});
+
+                            especificaciones = detalle.especificaciones;
+
+                            if(UtilServicio.esArrayNoVacio(especificaciones)){
+                                especificaciones.forEach(async (especificacion) => {
+                                    if(especificacion.id){
+                                        // No se debe modificar por el momento
+                                    }
+                                    else {
+                                        especificacion.idcotizaciondetalle = detalle.id;
+                                        await CotizacionProveedorDetEsp.create(especificacion)
+                                    }
+                                })
+                            }
                         }
                     } else {
-                        detalle.idcotizacion = cotizacion.id;
-                        return await CotizacionDetalle.create(detalle, {
+                        detalle.idcotizacionproveedorcab = cotizacionProveedor.id;
+                        return await CotizacionProveedorDetalle.create(detalle, {
                             include: [{
-                                model: CotizacionDetalleEspecificacion,
+                                model: CotizacionProveedorDetEsp,
                                 as: 'especificaciones'
                             }
                             ]})
                     }
                 });
-                return {ok: true,data: cotizacion.id, message: `Cotizacion actualizado, Código: ${cotizacion.id} `};
+                return {ok: true,message: `Cotizacion guardada correctamente `};
             } else {
                 respuesta = {ok: false, message: 'No se encontró la cotizacion para actualizar.'}
             }
@@ -245,30 +206,17 @@ export class CotizacionServicio {
         return respuesta;
     }
 
-    public async obtener(id){
-        let cotizacion;
+    public async obtenerParaProveedor(idCotizacion,idUsuario){
+        let cotizacionProveedor;
         let respuesta;
-        cotizacion = await Cotizacion.findOne({
-                attributes: ['id', 'fechacotizacion','diascredito','fechaentrega',
-                    'lugarentrega',
-                    'idrequerimiento','observacion','fechavencimiento'],
+
+        cotizacionProveedor = await CotizacionProveedor.findOne({
+                attributes: ['id', 'idproveedor','idcotizacion'],
                 include:[{
-                    model: CotizacionProveedor,
-                    as: 'cotizacionproveedores',
-                    attributes:['id','estado'],
-                    required: false,
-                    include: [{
-                        model: Proveedor,
-                        as: 'proveedor',
-                        attributes:['id','nombre']
-                    }],
-                    where: {
-                        estado: true
-                    }
-                },{
-                    model: CotizacionDetalle,
+                    model: CotizacionProveedorDetalle,
                     as: 'cotizaciondetalle',
-                    attributes:['id','cantidad','estado'],
+                    required: false,
+                    attributes:['id','cantidad','estado','precio','observacion'],
                     include:[{
                         model: Producto,
                         as: 'producto',
@@ -278,10 +226,10 @@ export class CotizacionServicio {
                         as: 'unidad',
                         attributes:['id','nombre']
                     },{
-                        model: CotizacionDetalleEspecificacion,
+                        model: CotizacionProveedorDetEsp,
                         as: 'especificaciones',
                         required: false,
-                        attributes:['id','detalle','estado'],
+                        attributes:['id','detalle'],
                         where: {
                             estado: true
                         }
@@ -290,15 +238,58 @@ export class CotizacionServicio {
                     where: {
                         estado: true
                     }
+                },{
+                    model: Cotizacion,
+                    as: 'cotizacion',
+                    attributes:['id','estado','fechacotizacion','fechaentrega','fechavencimiento','lugarentrega','observacion'],
+                    required: true,
+                    include: [{
+                        model: CotizacionDetalle,
+                        as: 'cotizaciondetalle',
+                        attributes:['cantidad','estado','idproducto','idunidad'],
+                        include:[{
+                            model: Producto,
+                            as: 'producto',
+                            attributes:['id','nombre']
+                        },{
+                            model: UnidadMedida,
+                            as: 'unidad',
+                            attributes:['id','nombre']
+                        },{
+                            model: CotizacionDetalleEspecificacion,
+                            as: 'especificaciones',
+                            required: false,
+                            attributes:['id','detalle','estado'],
+                            where: {
+                                estado: true
+                            }
+                        }
+                        ],
+                        where: {
+                            estado: true
+                        }
+                    }],
+                    where: {
+                        estado: true,
+                        fechavencimiento:
+                            {[Op.gt]: new Date()}
+                    }
                 }
                 ],
                 where: {
-                    id: id,
+                    idcotizacion: idCotizacion,
+                    idproveedor: idUsuario,
                     estado: true
                 }
-        })
+        });
 
-        respuesta = {ok: true,cotizacion};
+        cotizacionProveedor  = JSON.parse(JSON.stringify(cotizacionProveedor))
+        if(!UtilServicio.esArrayNoVacio(cotizacionProveedor.cotizaciondetalle)){
+            cotizacionProveedor.cotizaciondetalle = ( cotizacionProveedor.cotizacion.cotizaciondetalle);
+        }
+        delete cotizacionProveedor.cotizacion.cotizaciondetalle;
+
+        respuesta = {ok: true,cotizacionProveedor};
         return respuesta;
     }
 }

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {LocalstorageService} from '../../services/localstorage.service';
 import {MatTableDataSource, PageEvent} from '@angular/material';
-import {Cotizacion} from '../../interfaces/Cotizacion.interface';
+import {CotizacionProveedor} from '../../interfaces/Cotizacion.interface';
 import {BusquedaPaginada} from '../../../../../util/BusquedaPaginada';
 import {UtilService} from '../../services/util.service';
 import {MantenimientoService} from '../../services/mantenimiento.service';
@@ -15,11 +15,11 @@ import {Router} from '@angular/router';
 export class InicioComponent implements OnInit {
 
   usuario = {nombre: ''};
-  public cotizaciones: Cotizacion[];
+  public cotizaciones: CotizacionProveedor[];
   filtro = {};
   displayedColumns: string[] = ['pos', 'codigo', 'fechacotizacion', 'fechavencimiento', 'cotizar'];
   public paginacion: BusquedaPaginada;
-  dataSource: MatTableDataSource<Cotizacion>;
+  dataSource: MatTableDataSource<CotizacionProveedor>;
   constructor(private localstorageService: LocalstorageService,
               private mantenimientoService: MantenimientoService,
               private router: Router,
@@ -62,6 +62,11 @@ export class InicioComponent implements OnInit {
     this.paginacion.paginaActual = evento.pageIndex;
     this.paginacion.cantidadPorPagina = evento.pageSize;
     this.traerDatos();
+  }
+  cerrarSesion(){
+    localStorage.removeItem('token');
+    localStorage.removeItem('usuario');
+    this.router.navigateByUrl('/login');
   }
 
 }

@@ -1,26 +1,21 @@
 
 import * as Sequelize from 'sequelize'
 import { sequelize } from '../database/config'
-import {Proveedor} from "./Proveedor";
-import {CotizacionProveedorDetalle} from './CotizacionProveedorDetalle';
 
-export interface CotizacionProveedorDTO {
+export interface CotizacionProveedorDetEspDTO {
     id: number
-    idproveedor: number,
-    idcotizacion: number,
-    observacion: string
+    detalle: string
 }
-export class CotizacionProveedor extends Sequelize.Model{
 
+export class CotizacionProveedorDetEsp extends Sequelize.Model{
 }
-CotizacionProveedor.init({
+CotizacionProveedorDetEsp.init( {
     id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
         primaryKey: true
     },
-    observacion: Sequelize.STRING,
-    idproveedor: Sequelize.INTEGER,
+    detalle: Sequelize.STRING,
     estado: {type: Sequelize.BOOLEAN, defaultValue: true },
     usuario :{type: Sequelize.STRING, defaultValue: '' },
     pc : {type: Sequelize.STRING, defaultValue: '' },
@@ -31,8 +26,4 @@ CotizacionProveedor.init({
     ipmod : {type: Sequelize.STRING, defaultValue: '' },
     observacionmod :{type: Sequelize.STRING, defaultValue: '' },
     updatedAt : {type: Sequelize.DATE, field: 'fechamod' }
-},{freezeTableName: true, timestamps: true, tableName:'cotizacionproveedorcab', sequelize  });
-CotizacionProveedor.belongsTo(Proveedor,{ foreignKey: 'idproveedor' ,as: 'proveedor'} );
-
-CotizacionProveedor.hasMany(CotizacionProveedorDetalle, { foreignKey: 'idcotizacionproveedorcab' ,
-    as: { singular: 'cotizaciondetalle', plural: 'cotizaciondetalle' } });
+},{freezeTableName: true, timestamps: true, tableName: 'cotizacionproveedordetesp', sequelize  });

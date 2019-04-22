@@ -52,3 +52,4 @@ Cotizacion.hasMany(CotizacionDetalle, { foreignKey: 'idcotizacion' ,
 Cotizacion.hasMany(CotizacionProveedor, { foreignKey: 'idcotizacion' ,
     as: { singular: 'cotizacionproveedor', plural: 'cotizacionproveedores' } });
 
+CotizacionProveedor.belongsTo(Cotizacion,{ foreignKey: 'idcotizacion' ,as: 'cotizacion'} );

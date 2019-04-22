@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {Cotizacion} from '../../interfaces/Cotizacion.interface';
+import {CotizacionProveedor} from '../../interfaces/Cotizacion.interface';
 import {ActivatedRoute, Router} from '@angular/router';
 import {UtilService} from '../../services/util.service';
 import {MantenimientoService} from '../../services/mantenimiento.service';
@@ -11,13 +11,9 @@ import {MantenimientoService} from '../../services/mantenimiento.service';
 })
 export class CotizarComponent implements OnInit {
 
-  cotizacion: Cotizacion = {
+  cotizacion: CotizacionProveedor = {
+    cotizacion: {},
     cotizaciondetalle: [
-      {producto: {nombre: 'ALFILERES'}, cantidad: 20, unidad: {nombre: 'UNIDAD'}},
-      {producto: {nombre: 'PAPEL BOND X 100'}, cantidad: 20, unidad: {nombre: 'UNIDAD'}},
-      {producto: {nombre: 'ESCOBILLA PARA LAVAR'}, cantidad: 20, unidad: {nombre: 'UNIDAD'}},
-      {producto: {nombre: 'RECOGEDOR DE PLASTICO'}, cantidad: 10, unidad: {nombre: 'UNIDAD'}},
-      {producto: {nombre: 'MESA DE MADERA'}, cantidad: 20, unidad: {nombre: 'UNIDAD'}},
     ]
   };
   constructor(private activateRoute: ActivatedRoute,
@@ -30,14 +26,66 @@ export class CotizarComponent implements OnInit {
 
     if (!this.utilService.esNullUndefinedOVacio(codigo)) {
       this.cotizacion.id = parseInt( codigo, 10);
-
-      this.mantenimientoService.obtener(`cotizacion/${codigo}`)
+      this.utilService.showLoading();
+      this.mantenimientoService.obtener(`cotizacionproveedor/${codigo}`)
         .subscribe(data => {
-          this.cotizacion = data.cotizacion;
+          this.cotizacion = data.cotizacionProveedor;
+          this.utilService.hideLoading();
         }, error1 => {
           console.log(error1);
+          this.utilService.hideLoading();
         });
     }
+  }
+
+  cerrarSesion() {
+    localStorage.removeItem('token');
+    localStorage.removeItem('usuario');
+    this.router.navigateByUrl('/login');
+  }
+  guardar() {
+    this.utilService.showLoading();
+    this.mantenimientoService.guardar('cotizacionproveedor', this.cotizacion)
+      .subscribe(data => {
+        this.utilService.hideLoading();
+        if (data.ok) {
+          this.router.navigateByUrl('/inicio');
+          this.utilService.exitoMensaje('Cotización guardada exitosamente');
+        } else {
+          this.utilService.errorMensaje(data.message);
+        }
+      }, error1 => {
+        this.utilService.hideLoading();
+        this.utilService.errorMensaje('No se pudo guardar la cotización');
+      });
+  }
+  validarCotizacion() {
+    let productoSinPrecio;
+
+    productoSinPrecio = this.obtenerProductoSinPrecio();
+
+    if (!this.utilService.esNullUndefinedOVacio(productoSinPrecio)) {
+        this.utilService.showConfirm('Existen productos sin precio especificado, ¿Continuar de todos modos?', () =>{
+          this.guardar();
+        });
+        return;
+    }
+
+    this.guardar();
+  }
+
+  obtenerProductoSinPrecio() {
+    let res;
+    let aux = [];
+    if (this.utilService.esArrayNoVacio(this.cotizacion.cotizaciondetalle)) {
+      aux = this.cotizacion.cotizaciondetalle.filter(cd => {
+        return  this.utilService.esNullUndefinedOVacio(cd.precio);
+      });
+    }
+    if (this.utilService.esArrayNoVacio(aux)) {
+      res = aux[0];
+    }
+    return res;
   }
 
 }

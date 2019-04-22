@@ -23,8 +23,9 @@ import {MensajeExitoComponent} from './componentes/mensaje-exito/mensaje-exito.c
 import {LoadingComponent} from './componentes/Loading/loading.component';
 import {MensajeConfirmComponent} from './componentes/mensaje-confirm/mensaje-confirm.component';
 import { CotizarComponent } from './componentes/cotizar/cotizar.component';
-import {HttpClientModule} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {AutofocusDirective} from './directives/autofocus.directive';
+import {ErrorAuthInterceptorService} from './services/error-auth-interceptor.service';
 
 @NgModule({
   declarations: [
@@ -59,7 +60,7 @@ import {AutofocusDirective} from './directives/autofocus.directive';
     MatTableModule,
     MatPaginatorModule
   ],
-  providers: [],
+  providers: [{ provide: HTTP_INTERCEPTORS, useClass: ErrorAuthInterceptorService, multi: true }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

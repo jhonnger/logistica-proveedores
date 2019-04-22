@@ -3,8 +3,12 @@
   <mat-toolbar-row>
     <span>Solicitud de cotización</span>
     <span class="example-spacer"></span>
-    <mat-icon class="example-icon" aria-hidden="false" aria-label="Example user verified icon">verified_user</mat-icon>
+
+    <button  (click)="cerrarSesion()" mat-icon-button matSuffix aria-label="Salir">
+      <mat-icon>exit_to_app</mat-icon>
+    </button>
   </mat-toolbar-row>
+
 
 </mat-toolbar>
 
@@ -22,22 +26,22 @@
             <tr>
               <td style="width: 25%; font-size: small">Fecha de emisión</td>
               <td>:</td>
-              <td style="font-size: small">{{cotizacion.fechacotizacion | date: 'dd/MM/yyyy h:mm:ss a'}}</td>
+              <td style="font-size: small">{{cotizacion.cotizacion.fechacotizacion | date: 'dd/MM/yyyy h:mm:ss a'}}</td>
             </tr>
             <tr>
               <td style="font-size: small">Fecha de entrega</td>
               <td>:</td>
-              <td style="font-size: small">{{cotizacion.fechaentrega | date: 'dd/MM/yyyy h:mm:ss a'}}</td>
+              <td style="font-size: small">{{cotizacion.cotizacion.fechaentrega | date: 'dd/MM/yyyy h:mm:ss a'}}</td>
             </tr>
             <tr>
               <td style="font-size: small">Fecha de vencimiento</td>
               <td>:</td>
-              <td style="font-size: small">{{cotizacion.fechavencimiento | date: 'dd/MM/yyyy h:mm:ss a'}}</td>
+              <td style="font-size: small">{{cotizacion.cotizacion.fechavencimiento | date: 'dd/MM/yyyy h:mm:ss a'}}</td>
             </tr>
             <tr>
               <td style="font-size: small">Lugar de entrega</td>
               <td>:</td>
-              <td style="font-size: small">{{cotizacion.lugarentrega}}</td>
+              <td style="font-size: small">{{cotizacion.cotizacion.lugarentrega}}</td>
             </tr>
           </table>
         </div>
@@ -46,7 +50,7 @@
         <div></div>
         <div class="identificador" style="border: 1px solid #000000;height: 140px; width: 230px !important;
                                         margin-top: 25px;border-radius: 15px; font-size: 14px">
-          <h1>Solicitud de cotizacion <br> N° {{ ("000000"+cotizacion.id).slice(-6)}}</h1>
+          <h1>Solicitud de cotizacion <br> N° {{ ("000000"+cotizacion.cotizacion.id).slice(-6)}}</h1>
         </div>
         <div ></div>
       </div>
@@ -84,6 +88,9 @@
           </tr>
           </tbody>
         </table>
+      </div>
+      <div>
+        <button (click)="validarCotizacion()" mat-raised-button color="primary"  class="right">Guardar cotización</button>
       </div>
     </div>
   </div>

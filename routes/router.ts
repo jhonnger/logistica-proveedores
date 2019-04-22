@@ -9,6 +9,7 @@ import marca from './marca.route';
 import presentacion from './presentacion.route';
 
 import cotizacionrouter from "./cotizacion.route";
+import cotizacionproveedorrouter from './cotizacionproveedor.route';
 
 const rutasIndex = Router();
  
@@ -22,5 +23,6 @@ rutasIndex.use( '/tipoproducto', tipoproducto);
 rutasIndex.use( '/marca', marca );
 rutasIndex.use( '/presentacion', presentacion );
 rutasIndex.use( '/cotizacion', cotizacionrouter );
+rutasIndex.use( '/cotizacionproveedor', cotizacionproveedorrouter );
 
 export default rutasIndex;

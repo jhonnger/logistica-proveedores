@@ -246,6 +246,7 @@ create table cotizacionproveedordet(
     aniofab integer,
     idmarca integer,
     cantidad numeric(9,2) not null,
+    precio numeric(9,2) not null,
     observacion text,
     estado boolean, -- Estado del registro
     usuario character varying(50), -- Usuario que hizo el registo
