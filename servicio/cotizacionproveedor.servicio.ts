@@ -1,5 +1,5 @@
 
-import {Cotizacion, CotizacionDTO} from '../entidad/Cotizacion';
+import {Cotizacion} from '../entidad/Cotizacion';
 import {CotizacionDetalle} from '../entidad/CotizacionDetalle';
 import {CotizacionDetalleEspecificacion} from '../entidad/CotizacionDetalleEspecificacion';
 import {Op} from 'sequelize';
@@ -8,8 +8,7 @@ import {UnidadMedida} from '../entidad/UnidadMedida';
 import {logger} from "../global/environment";
 import {UtilServicio} from "../util/UtilServicio";
 import {MailSenderServicio} from "./MailSender.servicio";
-import {CotizacionProveedor, CotizacionProveedorDTO} from '../entidad/CotizacionProveedor';
-import {RespuestaControlador} from '../util/RespuestaControlador';
+import {CotizacionProveedor} from '../entidad/CotizacionProveedor';
 import {CotizacionProveedorDetalle} from '../entidad/CotizacionProveedorDetalle';
 import {CotizacionProveedorDetEsp} from '../entidad/CotizacionProveedorDetalleEspecificacion';
 

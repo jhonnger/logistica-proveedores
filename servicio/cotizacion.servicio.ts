@@ -75,7 +75,6 @@ export class CotizacionServicio {
 
         let codigo  = UtilServicio.obtenerFiltroComoString(filtros,'codigo');
         let estados = UtilServicio.obtenerFiltroComoArray(filtros,'estadoPedido');
-        let idPersonalSol = filtros.idPersonalSolicitante;
         let where: any = {};
         let respuesta;
 
@@ -85,11 +84,9 @@ export class CotizacionServicio {
                 [Op.eq]: codigo
             }
         }
-        if(!UtilServicio.esNullUndefinedOVacio(idPersonalSol)){
-            where.idpersonalsolicitante = {
-                [Op.eq]: idPersonalSol
-            }
-        }
+
+        where.fechavencimiento = {[Op.gt]: new Date()};
+
         if(UtilServicio.esArrayNoVacio(estados)){
             where.estadoreq = {
                 [Op.in]: estados
