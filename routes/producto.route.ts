@@ -1,6 +1,7 @@
 import {Request, Response, Router} from "express";
 import {ProductoServicio} from "../servicio/producto.servicio";
 import {verificarToken} from "../middlewares/auth";
+import {verificarIp} from '../middlewares/ippermitida';
 
 const productorouter = Router();
 
@@ -15,7 +16,7 @@ productorouter.route('/')
                 res.send(err)
             })
     })
-    .post(verificarToken, (req: Request, res: Response) => {
+    .post(verificarIp, (req: Request, res: Response) => {
     productoServicio.guardar(req.body)
         .then(data =>{
             res.json(data)
@@ -24,7 +25,7 @@ productorouter.route('/')
             res.send(err)
         })
     })
-    .put(verificarToken, (req: Request, res: Response) => {
+    .put(verificarIp, (req: Request, res: Response) => {
     productoServicio.actualizar(req.body)
         .then(data =>{
             res.json(data)

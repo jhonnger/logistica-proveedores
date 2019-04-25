@@ -30,7 +30,7 @@ cotizacionrouter.route('/')
             res.status(400).send(respuesta);
         }
     })
-    .put(verificarToken, (req: Request, res: Response) => {
+    .put(verificarIp, (req: Request, res: Response) => {
     cotizacionServicio.actualizar(req.body)
         .then(data =>{
             res.json(data)

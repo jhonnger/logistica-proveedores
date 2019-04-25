@@ -21,7 +21,7 @@ cotizacionproveedorrouter.route('/')
             res.status(400).send(respuesta);
         }
     })
-    .put(verificarToken, (req: Request, res: Response) => {
+    .put(verificarIp, (req: Request, res: Response) => {
         cotizacionProveedorServicio.actualizar(req.body)
         .then(data =>{
             res.json(data)

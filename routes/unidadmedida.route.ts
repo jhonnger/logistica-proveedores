@@ -1,6 +1,7 @@
 import {Request, Response, Router} from "express";
 import {UnidadMedidaServicio} from "../servicio/unidadmedida.servicio";
 import {verificarToken} from "../middlewares/auth";
+import {verificarIp} from '../middlewares/ippermitida';
 
 const unidadMedidarouter = Router();
 
@@ -15,7 +16,7 @@ unidadMedidarouter.route('/')
                 res.send(err)
             })
     })
-    .post(verificarToken, (req: Request, res: Response) => {
+    .post(verificarIp, (req: Request, res: Response) => {
     unidadMedidaServicio.guardar(req.body)
         .then(data =>{
             res.json(data)
@@ -24,7 +25,7 @@ unidadMedidarouter.route('/')
             res.send(err)
         })
     })
-    .put(verificarToken, (req: Request, res: Response) => {
+    .put(verificarIp, (req: Request, res: Response) => {
     unidadMedidaServicio.actualizar(req.body)
         .then(data =>{
             res.json(data)
