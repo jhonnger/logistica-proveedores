@@ -11,6 +11,7 @@ import {MailSenderServicio} from "./MailSender.servicio";
 import {CotizacionProveedor} from '../entidad/CotizacionProveedor';
 import {CotizacionProveedorDetalle} from '../entidad/CotizacionProveedorDetalle';
 import {CotizacionProveedorDetEsp} from '../entidad/CotizacionProveedorDetalleEspecificacion';
+import {Proveedor} from '../entidad/Proveedor';
 
 export class CotizacionProveedorServicio {
 
@@ -202,6 +203,99 @@ export class CotizacionProveedorServicio {
             logger.error(e);
             respuesta = {ok: false, message: 'Hubo un problema al actualizar.'}
         }
+        return respuesta;
+    }
+    public async obtenerParaCuadroComparativo(idcotizacion: number){
+        let cotizacionProveedor;
+        let cotizacion;
+        let cotizacionRespuesta: any = {};
+        let respuesta;
+
+        cotizacionProveedor = await Cotizacion.findOne({
+            attributes: ['id'],
+            include:[{
+                model: CotizacionProveedor,
+                as: 'cotizacionproveedores',
+                required: false,
+                attributes:['id','idproveedor'],
+                include: [{
+                    model: Proveedor,
+                    as:'proveedor',
+                    attributes:['id','nombre'],
+                },
+                    {
+                        model: CotizacionProveedorDetalle,
+                        as: 'cotizaciondetalle',
+                        required: false,
+                        attributes:['id','cantidad','estado','precio','observacion','idproducto'],
+                        include:[{
+                            model: Producto,
+                            as: 'producto',
+                            attributes:['id','nombre']
+                        },{
+                            model: UnidadMedida,
+                            as: 'unidad',
+                            attributes:['id','nombre']
+                        },{
+                            model: CotizacionProveedorDetEsp,
+                            as: 'especificaciones',
+                            required: false,
+                            attributes:['id','detalle'],
+                            where: {
+                                estado: true
+                            }
+                        }
+                        ],
+                        where: {
+                            estado: true
+                        }
+                    }
+                ]
+            },{
+                model: CotizacionDetalle,
+                as: 'cotizaciondetalle',
+                attributes:['cantidad','estado','idproducto','idunidad'],
+                include:[{
+                    model: Producto,
+                    as: 'producto',
+                    attributes:['id','nombre']
+                },{
+                    model: UnidadMedida,
+                    as: 'unidad',
+                    attributes:['id','nombre']
+                },{
+                    model: CotizacionDetalleEspecificacion,
+                    as: 'especificaciones',
+                    required: false,
+                    attributes:['id','detalle','estado'],
+                    where: {
+                        estado: true
+                    }
+                }
+                ],
+                where: {
+                    estado: true
+                }
+            }
+            ],
+            where: {
+                id: idcotizacion,
+                estado: true
+            }
+        });
+
+        if(!UtilServicio.esNullUndefinedOVacio(cotizacionProveedor)){
+            cotizacionRespuesta.cotizacionproveedor= cotizacionProveedor.cotizacionproveedores;
+            cotizacion = cotizacionProveedor;
+
+            delete cotizacion.cotizacionproveedores;
+            cotizacionRespuesta.cotizacion= cotizacion;
+
+            respuesta = {ok: true,data: cotizacionRespuesta};
+        } else {
+            respuesta = {ok: false, message: 'No se encontró registro'}
+        }
+
         return respuesta;
     }
 

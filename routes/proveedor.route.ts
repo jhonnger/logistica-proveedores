@@ -25,7 +25,7 @@ proveedorrouter.route('/')
             res.send(err)
         })
     })
-    .put(verificarToken, (req: Request, res: Response) => {
+    .put(verificarIp, (req: Request, res: Response) => {
     proveedorServicio.actualizar(req.body)
         .then(data =>{
             res.json(data)

@@ -7,6 +7,7 @@ import {Sequelize} from "sequelize";
 
 export const sequelize = new Sequelize(database, user, password, {
     host: host,
+    dialectOptions: { decimalNumbers: true },
     dialect:'postgres'
 });
 sequelize

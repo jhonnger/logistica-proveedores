@@ -32,11 +32,23 @@ cotizacionproveedorrouter.route('/')
         })
     });
 
-cotizacionproveedorrouter.get('/:id', verificarToken, async (req: any, res: Response) => {
+cotizacionproveedorrouter.get('/obtenerparacomparar/:id', verificarIp, async (req: Request, res: Response) => {
     let respuesta;
 
     try{
-        respuesta = await cotizacionProveedorServicio.obtenerParaProveedor(req.params.id,req.usuario.id);
+        respuesta = await cotizacionProveedorServicio.obtenerParaCuadroComparativo(req.params.id);
+        res.status(200).send(respuesta);
+    }catch (e) {
+        logger.error(e);
+        respuesta = {ok: false, message: 'Hubo un error al obtener la cotizacion'};
+        res.status(400).send(respuesta);
+    }
+});
+cotizacionproveedorrouter.get('/:cotizacion', verificarToken, async (req: any, res: Response) => {
+    let respuesta;
+
+    try{
+        respuesta = await cotizacionProveedorServicio.obtenerParaProveedor(req.params.cotizacion,req.usuario.id);
         res.status(200).send(respuesta);
     }catch (e) {
         logger.error(e);
