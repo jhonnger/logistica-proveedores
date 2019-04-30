@@ -8,7 +8,9 @@ export interface CotizacionProveedorDTO {
     id: number
     idproveedor: number,
     idcotizacion: number,
-    observacion: string
+    observacion: string,
+    formapago: string,
+    tiempoentrega: string
 }
 export class CotizacionProveedor extends Sequelize.Model{
 
@@ -16,10 +18,12 @@ export class CotizacionProveedor extends Sequelize.Model{
 CotizacionProveedor.init({
     id: {
         type: Sequelize.INTEGER,
-        autoIncrement: true,
+        autoIncrement: false,
         primaryKey: true
     },
     observacion: Sequelize.STRING,
+    formapago: Sequelize.STRING,
+    tiempoentrega: Sequelize.STRING,
     idproveedor: Sequelize.INTEGER,
     estado: {type: Sequelize.BOOLEAN, defaultValue: true },
     usuario :{type: Sequelize.STRING, defaultValue: '' },

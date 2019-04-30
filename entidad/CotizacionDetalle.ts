@@ -17,7 +17,7 @@ export class CotizacionDetalle extends Sequelize.Model{
 CotizacionDetalle.init({
     id: {
         type: Sequelize.INTEGER,
-        autoIncrement: true,
+        autoIncrement: false,
         primaryKey: true
     },
     cantidad: Sequelize.DECIMAL,

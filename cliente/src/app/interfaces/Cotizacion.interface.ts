@@ -15,6 +15,8 @@ export interface CotizacionProveedor {
   proveedores?: Proveedor[];
   enviarEmail?: boolean;
   subject?: string;
+  formapago?: string;
+  tiempoentrega?: string;
   cotizacion?: any;
   message?: string;
   lugarentrega?: string;

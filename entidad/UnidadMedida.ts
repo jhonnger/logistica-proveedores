@@ -14,7 +14,7 @@ export class UnidadMedida extends Sequelize.Model{}
 UnidadMedida.init( {
     id: {
         type: Sequelize.INTEGER,
-        autoIncrement: true,
+        autoIncrement: false,
         primaryKey: true
     },
     nombre: Sequelize.STRING,

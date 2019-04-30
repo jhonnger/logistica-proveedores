@@ -17,7 +17,7 @@ export class Proveedor extends Sequelize.Model{}
 Proveedor.init({
     id: {
         type: Sequelize.INTEGER,
-        autoIncrement: true,
+        autoIncrement: false,
         primaryKey: true
     },
     nombre: Sequelize.STRING,

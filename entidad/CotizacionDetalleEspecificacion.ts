@@ -12,7 +12,7 @@ export class CotizacionDetalleEspecificacion extends Sequelize.Model{
 CotizacionDetalleEspecificacion.init( {
     id: {
         type: Sequelize.INTEGER,
-        autoIncrement: true,
+        autoIncrement: false,
         primaryKey: true
     },
     detalle: Sequelize.STRING,

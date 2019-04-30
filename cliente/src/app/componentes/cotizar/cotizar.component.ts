@@ -29,7 +29,19 @@ export class CotizarComponent implements OnInit {
       this.utilService.showLoading();
       this.mantenimientoService.obtener(`cotizacionproveedor/${codigo}`)
         .subscribe(data => {
-          this.cotizacion = data.cotizacionProveedor;
+          if (data.ok) {
+            this.cotizacion = data.cotizacionProveedor;
+            if (Array.isArray(this.cotizacion.cotizaciondetalle)) {
+              this.cotizacion.cotizaciondetalle.forEach((value) => {
+                if (this.utilService.esNullUndefinedOVacio(value.preciounitario)) {
+                  value.preciounitario = 0;
+                }
+              });
+            }
+          } else {
+            this.utilService.errorMensaje('Error al traer la cotizacion');
+          }
+
           this.utilService.hideLoading();
         }, error1 => {
           console.log(error1);
@@ -64,8 +76,17 @@ export class CotizarComponent implements OnInit {
 
     productoSinPrecio = this.obtenerProductoSinPrecio();
 
+    if (this.utilService.esNullUndefinedOVacio(this.cotizacion.formapago)) {
+      this.utilService.alertMensaje('Debe ingresar la forma de pago');
+      return false;
+    }
+    if (this.utilService.esNullUndefinedOVacio(this.cotizacion.tiempoentrega)) {
+      this.utilService.alertMensaje('Debe ingresar los días de entrega');
+      return false;
+    }
+
     if (!this.utilService.esNullUndefinedOVacio(productoSinPrecio)) {
-        this.utilService.showConfirm('Existen productos sin precio especificado, ¿Continuar de todos modos?', () =>{
+        this.utilService.showConfirm('Existen productos sin precio especificado, ¿Continuar de todos modos?', () => {
           this.guardar();
         });
         return;
@@ -79,7 +100,7 @@ export class CotizarComponent implements OnInit {
     let aux = [];
     if (this.utilService.esArrayNoVacio(this.cotizacion.cotizaciondetalle)) {
       aux = this.cotizacion.cotizaciondetalle.filter(cd => {
-        return  this.utilService.esNullUndefinedOVacio(cd.precio);
+        return  this.utilService.esNullUndefinedOVacio(cd.preciounitario);
       });
     }
     if (this.utilService.esArrayNoVacio(aux)) {

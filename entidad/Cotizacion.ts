@@ -23,13 +23,13 @@ export class Cotizacion extends Sequelize.Model{}
 Cotizacion.init({
     id: {
         type: Sequelize.INTEGER,
-        autoIncrement: true,
+        autoIncrement: false,
         primaryKey: true
     },
     fechacotizacion: {type: Sequelize.DATE, defaultValue: new Date() },
     fechavencimiento: {type: Sequelize.DATE, defaultValue: new Date() },
     fechaentrega: {type: Sequelize.DATE, defaultValue: new Date() },
-    horaentrega: {type: Sequelize.DATE, defaultValue: new Date() },
+   // horaentrega: {type: Sequelize.DATE, defaultValue: new Date() },
     idrequerimiento: {type: Sequelize.INTEGER},
     diascredito: {type: Sequelize.INTEGER},
     observacion :{type: Sequelize.STRING, defaultValue: '' },

@@ -3,7 +3,6 @@ import * as Sequelize from 'sequelize'
 import { sequelize } from '../database/config'
 import {Producto} from './Producto';
 import {UnidadMedida} from './UnidadMedida';
-import {CotizacionDetalle} from './CotizacionDetalle';
 import {CotizacionProveedorDetEsp} from './CotizacionProveedorDetalleEspecificacion';
 
 export interface CotizacionProveedorDetalleDTO {
@@ -11,7 +10,7 @@ export interface CotizacionProveedorDetalleDTO {
     cantidad: number,
     idproducto: number,
     idunidad: number,
-    precio: number,
+    preciounitario: number,
     observacion: string
 }
 export class CotizacionProveedorDetalle extends Sequelize.Model{
@@ -24,7 +23,7 @@ CotizacionProveedorDetalle.init({
         primaryKey: true
     },
     cantidad: Sequelize.DECIMAL,
-    precio: Sequelize.DECIMAL,
+    preciounitario: Sequelize.DECIMAL,
     idunidad: Sequelize.INTEGER,
     observacion: Sequelize.STRING,
     idproducto: Sequelize.INTEGER,

@@ -21,7 +21,7 @@ export class Producto extends Sequelize.Model{}
 Producto.init( {
     id: {
         type: Sequelize.INTEGER,
-        autoIncrement: true,
+        autoIncrement: false,
         primaryKey: true
     },
     nombre: Sequelize.STRING,

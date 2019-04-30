@@ -144,7 +144,7 @@ export class CotizacionProveedorServicio {
         let detalleEnBase;
 
         try {
-            //Buscamos el cotizacion para actualizarlo
+            //Buscamos la cotizacion para actualizarlo
             cotizacionProveedorEnBase= await CotizacionProveedor.findOne({  where: {
                     id: cotizacionProveedor.id,
                     estado: true
@@ -152,7 +152,11 @@ export class CotizacionProveedorServicio {
 
 
             if(!UtilServicio.esNullUndefinedOVacio(cotizacionProveedorEnBase.id)){
-                await CotizacionProveedor.update({observacion: cotizacionProveedor.observacion},
+                await CotizacionProveedor.update({
+                        observacion: cotizacionProveedor.observacion,
+                        tiempoentrega: cotizacionProveedor.tiempoentrega,
+                        formapago: cotizacionProveedor.formapago,
+                    },
                     {where: {id: cotizacionProveedorEnBase.id}});
                 detalles = cotizacionProveedor.cotizaciondetalle;
 
@@ -167,7 +171,7 @@ export class CotizacionProveedorServicio {
 
                         if(!UtilServicio.esNullUndefinedOVacio(detalleEnBase)){
                             await CotizacionProveedorDetalle.update({
-                                precio: detalle.precio,
+                                preciounitario: detalle.preciounitario,
                                 observacion: detalle.observacion
                             } ,{where: {id: detalle.id}});
 
@@ -217,7 +221,7 @@ export class CotizacionProveedorServicio {
                 model: CotizacionProveedor,
                 as: 'cotizacionproveedores',
                 required: false,
-                attributes:['id','idproveedor'],
+                attributes:['id','idproveedor','formapago','tiempoentrega'],
                 include: [{
                     model: Proveedor,
                     as:'proveedor',
@@ -227,7 +231,7 @@ export class CotizacionProveedorServicio {
                         model: CotizacionProveedorDetalle,
                         as: 'cotizaciondetalle',
                         required: false,
-                        attributes:['id','cantidad','estado','precio','observacion','idproducto'],
+                        attributes:['id','cantidad','estado','preciounitario','observacion','idproducto'],
                         include:[{
                             model: Producto,
                             as: 'producto',
@@ -304,12 +308,12 @@ export class CotizacionProveedorServicio {
         let respuesta;
 
         cotizacionProveedor = await CotizacionProveedor.findOne({
-                attributes: ['id', 'idproveedor','idcotizacion'],
+                attributes: ['id', 'idproveedor','idcotizacion','tiempoentrega','formapago'],
                 include:[{
                     model: CotizacionProveedorDetalle,
                     as: 'cotizaciondetalle',
                     required: false,
-                    attributes:['id','cantidad','estado','precio','observacion'],
+                    attributes:['id','cantidad','estado','preciounitario','observacion'],
                     include:[{
                         model: Producto,
                         as: 'producto',

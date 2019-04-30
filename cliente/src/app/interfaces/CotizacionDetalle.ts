@@ -8,7 +8,8 @@ export interface CotizacionDetalle {
   producto?: Producto;
   cantidad?: number;
   idunidad?: number;
-  precio?: number;
+  preciounitario?: number;
+  preciototal?: number;
   observacion?: string;
   unidad?: UnidadMedida;
   estado?: boolean;

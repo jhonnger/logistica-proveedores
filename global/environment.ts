@@ -1,6 +1,6 @@
 
 export const SEED = '@logistica-@mi-@semilla';
-export const SERVER_PORT: number = Number( process.env.PORT ) || 5555;
+export const SERVER_PORT: number = Number( process.env.PORT ) || 80;
 
 import {configure, getLogger} from "log4js";
 

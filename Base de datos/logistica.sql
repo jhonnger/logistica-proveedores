@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS tipodocumento CASCADE;
 create table tipodocumento(
 	id serial ,
 	nombre character varying(100) not null,
@@ -84,7 +85,7 @@ create table tipoproducto(
 	CONSTRAINT tipoproducto_pkey PRIMARY KEY (id)
 );
 create table producto(
-	id serial ,
+	id integer ,
 	nombre character varying(100) not null,
     codbarras character varying(16), -- Codigo de barras
     codfabricante character varying(16), -- Codigo de barras
@@ -120,7 +121,7 @@ create table producto(
       ON UPDATE NO ACTION ON DELETE NO ACTION
 );
 create table proveedor(
-	id serial ,
+	id integer ,
 	nombre character varying(200) not null,
 	idtipodocum integer NOT NULL,
 	numdocumento character varying(20) NOT NULL, -- num documento
@@ -144,8 +145,9 @@ create table proveedor(
       ON UPDATE NO ACTION ON DELETE NO ACTION
 );
 
+DROP TABLE IF EXISTS cotizacion CASCADE;
 create table cotizacion(
-	id serial ,
+	id integer ,
 	fechacotizacion timestamp without time zone NOT NULL DEFAULT now(), -- Fecha del registro
 	idrequerimiento integer,
 	diascredito integer ,
@@ -167,8 +169,9 @@ create table cotizacion(
 	CONSTRAINT cotizacion_pkey PRIMARY KEY (id)
 );
 
+DROP TABLE IF EXISTS cotizaciondetalle CASCADE;
 create table cotizaciondetalle(
-	id serial ,
+	id integer ,
 	idcotizacion integer not null,
 	idproducto integer not null,
     idunidad integer not null,
@@ -194,9 +197,10 @@ create table cotizaciondetalle(
       REFERENCES public.unidad (id) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION
 );
+DROP TABLE IF EXISTS cotizaciondetespecif CASCADE;
 CREATE TABLE public.cotizaciondetespecif
 (
-  id serial,
+  id integer,
   idcotizaciondetalle integer NOT NULL,
   detalle character varying (200) NOT NULL,
   estado boolean,
@@ -214,10 +218,13 @@ CREATE TABLE public.cotizaciondetespecif
       REFERENCES public.cotizaciondetalle (id) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION
 );
+DROP TABLE IF EXISTS cotizacionproveedorcab CASCADE;
 create table cotizacionproveedorcab(
-	id serial ,
+	id integer ,
 	idcotizacion integer not null,
 	idproveedor integer not null ,
+    formapago character varying(100), -- Nombre de la PC donde se hizo el registro
+    tiempoentrega character varying(100), -- Nombre de la PC donde se hizo el registro
 	observacion text,
     estado boolean, -- Estado del registro
     usuario character varying(50), -- Usuario que hizo el registo
@@ -237,7 +244,7 @@ create table cotizacionproveedorcab(
       REFERENCES public.proveedor (id) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION
 );
-
+DROP TABLE IF EXISTS cotizacionproveedordet CASCADE;
 create table cotizacionproveedordet(
 	id serial ,
 	idcotizacionproveedorcab integer not null,
@@ -246,7 +253,7 @@ create table cotizacionproveedordet(
     aniofab integer,
     idmarca integer,
     cantidad numeric(9,2) not null,
-    precio numeric(9,2) not null,
+    preciounitario numeric(9,2) not null,
     observacion text,
     estado boolean, -- Estado del registro
     usuario character varying(50), -- Usuario que hizo el registo
@@ -272,6 +279,7 @@ create table cotizacionproveedordet(
       REFERENCES public.marca (id) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION
 );
+DROP TABLE IF EXISTS cotizacionproveedordetesp CASCADE;
 CREATE TABLE public.cotizacionproveedordetesp
 (
   id serial,

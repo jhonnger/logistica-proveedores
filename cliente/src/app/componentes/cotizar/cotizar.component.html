@@ -43,6 +43,24 @@
               <td>:</td>
               <td style="font-size: small">{{cotizacion.cotizacion.lugarentrega}}</td>
             </tr>
+            <tr>
+              <td style="font-size: small">Forma de pago</td>
+              <td>:</td>
+              <td style="font-size: small">
+                <mat-form-field fxFlex="100">
+                  <input autoFocus type="text"   matInput [(ngModel)]="cotizacion.formapago" placeholder="Forma de pago">
+                </mat-form-field>
+              </td>
+            </tr>
+            <tr>
+              <td style="font-size: small">Tiempo de entrega</td>
+              <td>:</td>
+              <td style="font-size: small">
+                <mat-form-field fxFlex="100">
+                  <input  type="text"  matInput [(ngModel)]="cotizacion.tiempoentrega" placeholder="Tiempo de entrega">
+                </mat-form-field>
+              </td>
+            </tr>
           </table>
         </div>
       </div>
@@ -63,7 +81,8 @@
             <th>Descripción / Especificaciones</th>
             <th>Cantidad</th>
             <th>Unidad </th>
-            <th>Precio </th>
+            <th>Precio Unitario </th>
+            <th>Precio Total </th>
             <th>Observaciones </th>
           </tr>
           </thead>
@@ -77,12 +96,15 @@
             <td style="text-align: center;font-size: 12px;vertical-align: top;" class="texto-centrado">{{detalle.unidad.nombre}}</td>
             <td style="text-align: center;font-size: 12px;vertical-align: top;" class="texto-centrado">
               <mat-form-field fxFlex="100">
-                <input  type="number" autoFocus  matInput [(ngModel)]="detalle.precio" placeholder="Precio">
+                <input min="0"  type="number"  matInput [(ngModel)]="detalle.preciounitario" placeholder="Precio unitario">
               </mat-form-field>
             </td>
             <td style="text-align: center;font-size: 12px;vertical-align: top;" class="texto-centrado">
+              {{detalle.preciounitario * detalle.cantidad}}
+            </td>
+            <td style="text-align: center;font-size: 12px;vertical-align: top;" class="texto-centrado">
               <mat-form-field fxFlex="100">
-                <input  mayuscula autoFocus  matInput [(ngModel)]="detalle.observacion" placeholder="Observacion">
+                <input  mayuscula  matInput [(ngModel)]="detalle.observacion" placeholder="Observacion">
               </mat-form-field>
             </td>
           </tr>
